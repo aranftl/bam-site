@@ -1,5 +1,31 @@
-const response = await fetch(
-  'https://codegen.plasmic.app/api/v1/loader/html/preview/mEcGDPWhynD51SSQ6owQfo/Components?hydrate=1&embedHydrate=1',
+var getPlasmicData = async function () {
+
+const query = new URLSearchParams([
+  ['hydrate', '1'],
+  ['embedHydrate', '1'],
+  [
+    'componentProps',
+    JSON.stringify({
+      bamVerticalMenu: {
+        defaultopenKeys: 'menu1',
+        defaultSelectedKeys:  '1-1'
+      }
+    })
+  ],
+  [
+    'globalVariants',
+    JSON.stringify([
+      // Your global variants
+      {
+        name: 'Theme',
+        value: 'Light'
+      }
+    ])
+  ]
+]);  
+  
+var response = await fetch(
+  `https://codegen.plasmic.app/api/v1/loader/html/preview/mEcGDPWhynD51SSQ6owQfo/Components?${query}`,
   {
     headers: {
       // Your project ID and public API token
@@ -9,5 +35,10 @@ const response = await fetch(
     }
   }
 );
-const result = await response.json();
-document.body.innerHTML = result.html;
+var result = await response.json();
+document.getElementById('plasmic-code').innerHTML = result.html;
+var script = document.createElement("script");
+    script.src = "https://codegen.plasmic.app/static/js/loader-hydrate.js";
+    document.body.appendChild(script);
+};
+getPlasmicData();
